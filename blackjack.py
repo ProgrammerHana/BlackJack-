@@ -11,8 +11,8 @@ class Blackjackgame:
         self.deal_card(self._dealer_hand,True)
 
     def create_deck(self):
-        ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-        suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+        ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
+        suits = ['hearts', 'diamonds', 'clubs', 'spades']
         deck = [{'rank': rank, 'suit': suit , 'hidden':False} for rank in ranks for suit in suits]
         random.shuffle(deck)
         return deck
@@ -24,8 +24,10 @@ class Blackjackgame:
 
     def calculate_score(self,hand):
         score = sum(self.card_value(card['rank'])for card in hand)
-        if  score>21 and self.has_ace(hand):
-            score -=10
+        num_aces = sum(1 for card in hand if card['rank'] == 'A')
+        while score > 21 and num_aces:
+            score -= 10
+            num_aces -= 1
         return score
     def card_value(self,rank):
         if rank in ['K', 'Q', 'J']:
